@@ -1,0 +1,88 @@
+\chapter{Testing device functionality}
+\label{ch:testing_device_fun}
+
+For individual device functionality test a special task which interprets commands sent through serial port and calls corresponding API functions has been devised. It is called \texttt{test\_function} and is located in \texttt{main.c} of \texttt{MU31S} project.
+
+To send commands, a serial connection to MB's general purpose UART needs to be established. All of the commands and debugging messages are then sent through that link.
+
+To test the functionality, a special sequence of messages has been defined. The controls are found in the table \ref{tbl:mu_comms}.
+
+\begin{longtable}[c]{llll}
+	\caption{MB testing commands} \label{tbl:mu_comms} \\
+	    \myhline
+    	\multicolumn{4}{l}{Bootloader} \\ \hline
+	    b & ~ & ~ & enter Bootloader \\
+	    \myhline
+	    \multicolumn{4}{l}{Power board} \\ \hline
+	    P & 1 & ~ & switch to main battery \\
+   	    P & 2 & ~ & switch to backup battery \\
+   	    P & 3 & ~ & disable charging \\
+   	    P & 4 & ~ & get main battery voltage \\
+   	    P & 5 & ~ & get backup battery voltage \\
+   	    P & 6 & ~ & get main battery current \\
+   	    P & 7 & ~ & get backup battery current \\
+   	    P & 8 & ~ & get supply current \\
+   	    P & 9 & ~ & get main battery's charging status \\
+   	    P & A & ~ & get backup battery's charging status \\
+   	    P & B & ~ & enable charging \\
+		\myhline
+        \multicolumn{4}{l}{Electric sense} \\ \hline
+	    e & b & ~ & esense board program \\
+	    e & 0 & ~ & esense board init \\
+	    e & s & ~ & esense board 's' command \\
+	    e & m & ~ & esense board 'm' command \\
+	    e & + & ~ & esense board '+' command \\
+	    e & - & ~ & esense board '-' command \\
+	    e & a & ~ & esense board get angle \\
+	    e & d & ~ & esense board get distance \\
+	    \myhline
+        \multicolumn{4}{l}{Turbidity sensor} \\ \hline
+	    t & ~ & ~ & Get turbidity sensor reading. \\
+	    \myhline
+        \multicolumn{4}{l}{GSM/GPS module} \\ \hline
+	    g & c & ~ & call a number defined in test function \\
+   	    g & h & ~ & hang up \\
+   	    g & s & ~ & send SMS to a number defined in test function \\
+   	    g & m & ~ & receive SMS \\
+   	    g & u & ~ & list all unread SMS \\
+   	    g & a & ~ & list all SMS \\
+   	    g & l & ~ & clean read SMS \\
+   	    g & N & ~ & power on GPS module \\
+   	    g & F & ~ & power off GPS module \\
+   	    g & f & ~ & get GPS fix status \\
+   	    g & k & ~ & get GPS data \\
+   	    \myhline
+        \multicolumn{4}{l}{SPI IMU} \\ \hline
+	    p & a & ~ & get accelerometer data \\
+   	    p & g & ~ & get gyroscope data \\
+   	    p & m & ~ & get magnetometer data \\
+   	    p & c & ~ & calibrate imu \\
+   	    \myhline
+        \multicolumn{4}{l}{LEDs} \\ \hline
+	    l & r & num & turn red with intensity \textit{num} \\
+	    l & g & num & turn green with intensity \textit{num} \\
+	    l & b & num & turn blue with intensity \textit{num} \\
+	    l & o & ~ & turn off \\
+	    l & l & num & turn into rgb defined by \textit{num} \\
+	    \myhline
+        \multicolumn{4}{l}{Buoyancy motors test} \\ \hline
+	    m & u & ~ & go up \\
+	    m & d & ~ & go down \\
+	    m & s & ~ & stop \\
+	    \myhline
+        \multicolumn{4}{l}{Pressure and temperature sensor} \\ \hline
+	    r & r & ~ & reset \\
+	    r & p & ~ & get pressure \\
+	    r & t & ~ & get temperature \\
+	    \myhline
+        \multicolumn{4}{l}{Scenarios} \\ \hline
+	    s & x & ~ & power Pi on (with faulty scenario on purpose) \\
+	    s & C & ~ & turn off Pi (following the procedure) \\
+		s & Z & ~ & turn off Pi (on pin) \\	    
+		s & 1 & ~ & experiment 1 \\
+		s & 2 & ~ & experiment 2 \\
+	    s & 3 & ~ & experiment 3 \\
+		s & 4 & ~ & experiment 4 \\	    
+	    ... & ~ & ~ \\
+	    x & ~ & ~ & Cancel currently running scenario. \\
+\end{longtable}
