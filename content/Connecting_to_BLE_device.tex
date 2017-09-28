@@ -1,49 +1,42 @@
-\chapter{Connecting to BLE device}
+\chapter{Connecting to aMussel over Bluetooth}
 \label{ch:connecting_to_ble}
 
 \begin{figure}[htb]
     \centering
-	  \includegraphics[width=0.8\linewidth]{figures/BLE_module_Dongle.pdf}
-	\caption{Hardware needed to establish BLE bridge: (a) BLE module on MU (CY5671), (b) BLE USB dongle (CY5670)}
+	  \includegraphics[width=0.5\linewidth]{figures/USB_Dongle.png}
+	\caption{BLE USB dongle (CY5670)}
 	\label{fig:ble_hardware}
 \end{figure}
 
-Hardware components:
+Necessary hardware components:
 \begin{itemize}
-	\item BLE module on MU -- \url{http://www.cypress.com/documentation/development-kitsboards/cy5671-proc-ble-module} 
-	\item BLE dongle -- \url{http://www.cypress.com/documentation/development-kitsboards/cy5670-cysmart-usb-dongle} \\
-	The purpose of BLE dongle is to provide UART bridge between MU and PC. It can be used for programming MU via BLE Bootloader or for basic serial communication.
+	\item Bluetooth (BLE) module on MainBoard (MB) -- each aMussel comes with an embedded BLE module
+	\item BLE dongle that needs to be connected to user's PC USB port -- \href{http://www.cypress.com/documentation/development-kitsboards/cy5670-cysmart-usb-dongle}{dongle used for subCULTron} \\
+	The purpose of BLE dongle is to provide UART bridge between MB and PC. It's main purpose is to establish basic serial communication between MB on aMussel and PC.
 \end{itemize}
 
-In order to connect to BLE device on aMussel, the following prerequisites have to be met:
+In order to connect to aMussel over Bluetooth, the following prerequisites have to be met:
 \begin{enumerate}
-	\item You need to have BLE dongle configured.
-	\item BLE board on MU has to be programmed.
+	\item BLE dongle has to be programmed.
+	\item BLE module on MB has to be programmed with a certain aMussel ID.
 \end{enumerate}
 
-\section{Configuring BLE dongle}
+\section{Programming BLE dongle}
 
-BLE dongle needs to be programmed using MiniProg. The code is provided in \texttt{BLE\_DONGLE} project of PSoC creator \texttt{MU31S-000} workspace.
+The code for BLE dongle is provided in subCULTron's GitHub page (\href{https://github.com/subCULTron-project}{link}), \texttt{BLE-Dongle} repository. To program BLE dongle you need to install PSoC Creator 4.0 IDE (\href{http://www.cypress.com/documentation/software-and-drivers/psoc-creator-software-archive}{here}) and checkout the needed git repository.
 
-\begin{figure}[htb]
-    \centering
-	  \includegraphics[width=0.25\linewidth]{figures/dongle_miniprog.jpg}
-	\caption{Connecting BLE dongle to MiniProg3}
-	\label{fig:dongle_prog}
-\end{figure}
-
-Steps:
+Then:
 \begin{enumerate}
-	\item Build the project (right click on project name > Build \texttt{BLE\_DONGLE}).
+	\item Open the \texttt{BLE-Dongle} project in PSoC Creator. Build the project (right click on project name > Build \texttt{BLE\_DONGLE}).
 	\item Set \texttt{BLE\_DONGLE} project to active (right click on project name > Set As Active Project).
-	\item Connect MiniProg to dongle and the PC (see Figure \ref{fig:dongle_prog}).
+	\item Connect BLE dongle to the PC's USB port 
 	\item Program the dongle (\textit{program} button in PSoC creator or Ctrl+F5).
 	\item If prompted, select a device to program.
 \end{enumerate}
 
-\section{Programming BLE board}
+\section{Programming BLE module}
 
-BLE module can be programmed using MiniProg. The code is provided in \texttt{BLE\_UART\_BRIDGE} project of PSoC creator \texttt{MU31S-000} workspace.
+BLE module can be programmed using MiniProg programmer. The code is provided in \texttt{BLE\_UART\_BRIDGE} project of PSoC creator \texttt{MU31S-000} workspace, which can be found on project's GitHub page, \texttt{MainBoard-middleware} repository.
 
 \begin{figure}[htb]
     \centering
@@ -57,7 +50,7 @@ Steps:
 	\item Modify the project to define aMussel ID. To do so, open TopDesign.cysch and double click on BLE module. Go to GAP Settings > General and enter aMussel ID in Device Name field (see Figure \ref{fig:ble_device_name}). Naming convention is as follows: \texttt{'aMXXX'}, where \texttt{'XXX'} represents aMussel ID in range $[000-999]$, e.g. \texttt{'aM001', 'aM023'} \ldots
 	\item Build the project (right click on project name > Build \texttt{BLE\_UART\_BRIDGE}).
 	\item Set \texttt{BLE\_UART\_BRIDGE} project to active (right click on project name > Set As Active Project).
-	\item Connect MiniProg to BLE board and the PC.
+	\item Connect MiniProg to BLE module and the PC.
 	\item Program the device (\textit{program} button in PSoC creator or Ctrl+F5).
 	\item If prompted, select a device to program.
 \end{enumerate}
@@ -92,9 +85,9 @@ Steps:
 	\label{fig:docklight_aMussel_selection}
 \end{figure}
 
-To successfully send and receive data from BLE module on MU, we recommend the following setup:
+To successfully send and receive data between aMussel and PC, we recommend the following setup:
 \begin{enumerate}
-	\item Connect programmed BLE dongle to your PC.
+	\item Connect the programmed BLE dongle to your PC.
 	\item Open Docklight \footnote{\url{docklight.de/}} (or any other tool for serial communication).
 	\item Connect to the correct COM port. Port can be selected by double clicking on top right sections of status bar (indicated with red rectangle in Figure \ref{fig:docklight_com}). After selecting the port, make sure the settings are matching the ones in the figure. Now you can simply press the play button to establish connection.
 	\item When connected to BLE dongle, you should see the output in your serial communication program as presented in Figure \ref{fig:docklight_ble_bridge_status}. If the output is not there or the program is stuck for any reason, you can always reset it by pressing the user button on dongle (see Figure \ref{fig:usb_dongle_parts}).
